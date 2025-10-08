@@ -1,0 +1,93 @@
+---
+title: "R Take-Home Assignment 4: World Development Data (Multiple Indicators)"
+author: "Your Name"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+## Overview
+
+In this assignment you will explore a dataset combining three important development indicators for almost all countries in the world between 1990 and 2020:
+
+- **GDP per capita** – a measure of economic output per person  
+- **Life expectancy** – an indicator of population health  
+- **CO$_2$ emissions per capita** – a measure of environmental impact  
+
+The dataset `world_data.csv` has already been prepared for you. It allows you to study how wealth, health, and environmental outcomes are related across countries and over time.  
+
+### Source
+
+File on disk `world_data.csv` (should be stored  in the same folder as this `.Rmd`)  
+
+### Skills
+
+`reading local CSVs, subsetting, cleaning, plotting, interpreting relationships`
+
+```{r setup-ass4, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Preparation
+
+You will need: `dplyr`, `ggplot2`, `readr`.
+
+```{r}
+## Task: load packages (hint: library())
+## library(dplyr)
+## library(ggplot2)
+## library(readr)
+```
+
+## 1. Load the dataset
+
+Before we can do any analysis, the dataset needs to be loaded into R. Since this file is stored locally, you’ll also practise one of the most common first steps in data analysis: reading data from disk.  
+
+**Task:** Load `world_data.csv` into R and store it as `world_data`. Print the number of rows and columns, and look at the first few lines of the data.  
+
+```{r}
+## Task: read CSV 
+## Task: check dimensions 
+## Task: preview 
+```
+
+## 2. Subset the dataset
+
+Instead of analysing every year, it’s common to take a snapshot of one year for cross-country comparisons. Here we’ll use 2015, as it provides recent data but avoids issues with missing values in the latest years.  
+
+**Task:** Subset the dataset to the year 2015. Show the resulting table (a few rows is enough).  
+
+```{r}
+## Task: hint: filter(year == 2015))
+```
+
+## 3. Explore summary statistics
+
+Before making plots, it’s useful to see some descriptive statistics. Averages and ranges can reveal whether values look reasonable, and whether there is a lot of variation between countries.  
+
+**Task:** For all countries in 2015, calculate the mean and range for GDP per capita, life expectancy, and CO$_2$ emissions per capita.  
+
+```{r}
+## Task: summarise mean and range for all 3 variables (hint: summarise(mean(...), range(...)))
+```
+
+## 4. Plot GDP vs life expectancy
+
+A classic question in development studies is whether economic prosperity translates into better health outcomes. Plotting GDP per capita against life expectancy lets us explore this visually. Adding CO$_2$ emissions as colour allows us to consider whether higher prosperity comes with environmental costs.  
+
+**Task:** Create a scatterplot of GDP per capita (x-axis, log scale) vs life expectancy (y-axis). Colour the points by CO$_2$ emissions per capita. Add informative axis labels and a title.  
+
+```{r}
+## Task: plot scatter (hint: ggplot(..., aes(x=, y=, color=)) + geom_point() + scale_x_log10())
+```
+
+## 5. Reflection
+
+The final step in any analysis is to connect numbers and plots back to real-world meaning. Does wealth always mean health? Are there exceptions? Do you notice patterns in CO$_2$ emissions?  
+
+**Task:** Write 3–4 sentences interpreting your findings. Mention at least one interesting or surprising pattern.  
+
+*Write your reflection here…*

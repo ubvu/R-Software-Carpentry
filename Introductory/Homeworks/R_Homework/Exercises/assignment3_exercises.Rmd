@@ -1,0 +1,90 @@
+---
+title: "R Take-Home Assignment 3: OWID COVID-19 (Loops & Conditionals)"
+author: "Your Name"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+   toc: true
+   toc_depth: 2
+   number_sections: true
+---
+
+## Overview
+
+In this assignment you will work with the **Our World in Data (OWID) COVID-19 dataset**, which tracks the spread and impact of the pandemic globally. We will focus on daily new cases for three countries: the Netherlands, Germany, and Italy, to explore and compare how case numbers change over time. 
+
+Because daily counts can be noisy (for example, due to weekend reporting effects), you will use rolling averages and logical flags to highlight important peaks. This exercise gives practice with **loops and conditionals**, two fundamental programming tools that help automate repetitive tasks and make decisions based on data. 
+
+### Source
+
+`https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv`
+
+### Skills
+
+`importing CSVs, subsetting, rolling averages, logical flags, time-series plots` 
+
+```{r setup-ass3, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Preparation
+
+You will need: `dplyr`, `ggplot2`, `readr`, `zoo`.
+
+```{r}
+# Task: load packages (hint: library())
+# library(dplyr)
+# library(ggplot2)
+# library(readr)
+# library(zoo)
+```
+
+## 1. Load and subset the data
+
+The OWID dataset covers almost every country in the world, with dozens of variables. But when you try to analyse such a dataset all at once, it quickly becomes overwhelming. That’s why data analysis almost always starts with narrowing down the scope. By focusing on just three countries: the Netherlands, Germany, and Italy, we can make direct comparisons while keeping the dataset manageable.
+
+**Task:** Load the OWID dataset from the provided URL. Subset it to the Netherlands, Germany, and Italy. Convert the `date` column to type `Date`. 
+
+```{r}
+# Task: read CSV (hint: read_csv(url))
+# Task: subset to 3 countries (hint: filter(country %in% c("Netherlands","Germany","Italy")))
+# Task: convert date (hint: mutate(date=as.Date(date)))
+```
+
+## 2. Compute a 7-day moving average
+
+Daily case counts are notoriously unreliable. Reporting lags (e.g., fewer tests on weekends) create artificial spikes and dips. Epidemiologists usually look at moving averages to reveal the underlying trend. By calculating a 7-day moving average, you smooth away much of the noise and get a clearer view of how the epidemic rose and fell.
+
+**Task:** For each of the three countries, calculate a 7-day rolling average of `new_cases`. Store it in a new column `ma7`.
+
+```{r}
+# Task: compute moving average (hint: group_by(); arrange(); mutate(ma7=zoo::rollmean(new_cases,7,fill=NA,align="right")))
+```
+
+## 3. Flag large values
+
+One way public health agencies respond to epidemics is by setting thresholds: if cases exceed a certain number, new policies may be introduced. Adding a logical flag to our dataset helps automatically highlight when such thresholds are crossed. This makes it easier to identify peaks without having to scan the entire table manually.
+
+**Task:** Add a logical column `flag_high` that is `TRUE` if the moving average calculated in the previous step exceeds 25000 and `FALSE` otherwise.
+
+```{r}
+## Task: add flag column (hint: mutate(flag_high = ma7 > 25000))
+```
+
+## 4. Plot with flagged points
+
+Tables are useful, but trends over time are much easier to interpret visually. A time-series plot not only shows the shape of each country’s epidemic but also makes it obvious when peaks occurred. By highlighting flagged points directly in the plot, we can see exactly when thresholds were crossed, and whether this happened at the same time in different countries.
+
+**Task:** Create a line plot of the 7-day averages (`ma7`) over time for each country. Use different colours for the countries, and mark flagged points with an additional symbol (e.g. points in red).
+
+```{r}
+## Task: plot (hint: ggplot() + geom_line(); add geom_point(data=subset(..., flag_high)))
+```
+
+## 5. Reflection
+
+Finally, think about the patterns. Which country had the highest peaks? Did they occur at the same time? Did the threshold capture the waves you would expect?
+
+**Task:** Write 3–4 sentences comparing the trends across the three countries and reflecting on how loops and conditionals helped structure the analysis.
+
+*Write your reflection here…*

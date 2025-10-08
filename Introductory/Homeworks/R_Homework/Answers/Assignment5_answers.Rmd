@@ -1,0 +1,117 @@
+---
+title: "R Take-Home Assignment 5 (Instructor Key): Statistics with Penguins"
+author: "Instructor"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+  pdf_document:
+    latex_engine: xelatex
+---
+## Overview
+
+In this assignment you will practice simple statistical tests in R using the **palmerpenguins** dataset. We will ask biological questions about penguin body mass, learn to run standard tests in R, and interpret the results. Each section starts with a short story to explain why we are doing this step.
+
+### Source
+
+`palmerpenguins` package
+
+### Skills
+
+`t-tests, ANOVA, post-hoc tests, effect sizes, diagnostics`
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(dplyr)
+library(ggplot2)
+library(palmerpenguins)
+library(broom)
+library(effectsize)
+library(tidyr)
+```
+
+## 1. Load the dataset
+
+Before we can analyze penguins, we need to load the dataset. Real-world data often contain missing values, which can cause errors in analysis, so we will remove them first.
+
+```{r}
+data(penguins)
+penguins <- penguins %>% drop_na()
+glimpse(penguins)
+```
+
+## 2. Two-sample t-test
+
+Imagine you are a biologist asking: *Do male and female penguins of the same species differ in body mass?*  
+The **t-test** compares the means of two groups. It answers whether the difference is large enough that it is unlikely to be due to chance.
+
+```{r}
+adelie <- penguins %>% filter(species == "Adelie")
+t.test(body_mass_g ~ sex, data = adelie)
+cohens_d(body_mass_g ~ sex, data = adelie)
+```
+
+## 3. ANOVA
+
+Now suppose we want to compare *all three species at once*. Do Gentoo, Adelie, and Chinstrap penguins differ in body mass?  
+An **ANOVA (Analysis of Variance)** extends the t-test to more than two groups.
+
+```{r}
+anova_model <- aov(body_mass_g ~ species, data = penguins)
+summary(anova_model)
+```
+
+## 4. Post-hoc tests
+
+ANOVA tells us if there is *some* difference between groups, but not *which groups differ*. For that, we run a **Tukey HSD post-hoc test**.
+
+```{r}
+TukeyHSD(anova_model)
+```
+
+## 5. Effect sizes
+
+Statistical significance is not enough: we also want to know *how large the difference is*.  
+- For t-tests, we use **Cohen’s d** (small ≈ 0.2, medium ≈ 0.5, large ≈ 0.8).  
+- For ANOVA, we use **η² (eta squared)** (small ≈ .01, medium ≈ .06, large ≈ .14).  
+
+```{r}
+eta_squared(anova_model)
+```
+
+## 6. Diagnostics (checking assumptions)
+
+Every statistical test makes assumptions. For ANOVA, the two most important are:
+
+1. **Equal spread of errors (homoscedasticity):**  
+   The variation in the data should be roughly the same across all groups.  
+
+2. **Normally distributed errors:**  
+   The differences between the observed data and the model’s predictions (residuals) should follow a bell-shaped curve.  
+
+We can check these assumptions using two standard diagnostic plots:
+
+- **Residuals vs Fitted plot**  
+  - Each dot is one observation.  
+  - The x-axis shows what the model predicts, the y-axis shows the “error” (residual).  
+  - What to look for: the dots should look like random noise.  
+    - If you see a curve → the relationship might not be captured well.  
+    - If you see a funnel shape → group variances may not be equal.  
+
+- **Normal QQ plot**  
+  - This compares your residuals to what would be expected if they were perfectly normal.  
+  - What to look for: the dots should fall roughly along the diagonal line.  
+    - If they bend away strongly → residuals may not be normally distributed.  
+
+```{r}
+plot(anova_model, which = 1)
+plot(anova_model, which = 2)
+```
+
+## 7. Reflection
+
+Statistics are not just numbers: they help answer real questions. Think like a biologist preparing a short report.
+
+Across species, body mass differs significantly, with Gentoo penguins being much heavier. Within a species (e.g. Adelie), males are significantly heavier than females. Effect sizes (Cohen’s d and η²) show these are large effects. Diagnostics are usually acceptable; residuals look roughly normal and variance is fairly equal.

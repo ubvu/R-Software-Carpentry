@@ -1,0 +1,122 @@
+---
+title: "R Take-Home Assignment 1: Gapminder (Wrangling & Visualization)"
+author: "Your Name"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+## Overview
+
+In this first assignment, you will work with the Gapminder dataset, a classic resource for studying global development. Originally compiled by the Gapminder Foundation, this dataset brings together health, population, and economic data for 142 countries between 1952 and 2007, measured at five-year intervals.
+
+Each record in the dataset contains:
+
+- Life expectancy (`lifeExp`): the average number of years a newborn is expected to live, given current mortality rates.
+- Population size (`pop`): the total number of inhabitants in the country that year.
+- GDP per capita (`gdpPercap`): the average economic output per person, adjusted for inflation and expressed in US dollars.
+- `Country` and `continent` information: identifiers for grouping and comparison.
+
+The dataset is widely used because it allows us to explore broad questions: How did life expectancy change across different continents over the second half of the 20th century? Do wealthier countries consistently have higher life expectancy? And how much variation exists within regions?
+
+In this assignment, you will practice the core steps of data analysis in R: importing data, exploring its structure, creating subsets, calculating summaries, and producing visualisations. These are fundamental skills you will use again and again in your own research.
+
+### Source
+
+`https://github.com/resbaz/r-novice-gapminder-files/raw/master/data/gapminder-FiveYearData.csv`  
+
+### Skills
+
+`loading CSVs, subsetting, summarising, plotting`
+
+```{r setup-ass1, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Preparation
+
+You will need the following R packages:  
+
+- `dplyr`, `ggplot2`, `readr`  
+
+```{r}
+# Task: load the required packages (hint: use library())
+# library(dplyr)
+# library(ggplot2)
+# library(readr)
+```
+
+## 1. Load the data
+
+Every analysis begins with bringing the data into R. Here, you will import the Gapminder dataset directly from its online source.  
+
+**Task:** Load the Gapminder dataset into R and store it as `gapminder`.  
+
+```{r}
+# Task: load dataset here (hint: read_csv() from readr)
+```
+
+## 2. Explore the dataset
+
+Before we can analyse, we need to understand what the dataset looks like. How many countries are covered, what years are available, and what variables can we work with?  
+
+**Task:** Report the number of countries, the range of years, and the variable names.  
+
+```{r}
+# Task: explore the dataset (hint: n_distinct(), range(), names())
+```
+
+Write your answers here:  
+
+```
+Countries: ...
+Years: ...
+Variables: ...
+```
+
+## 3. Subset the data
+
+Analyses are often limited to a particular region of interest. Suppose you are asked to focus only on Europe.  
+
+**Task:** Create a subset containing only the rows where `continent` is `"Europe"`. Save this as `europe`.  
+
+```{r}
+# Task: subset the data (hint: filter(continent == "Europe"))
+```
+
+## 4. Summarise life expectancy
+
+To see how regions compare, we want to calculate average life expectancy for each continent over time. This will let us track differences across the decades.  
+
+**Task:** Calculate the mean life expectancy per continent per year. Save the result as `lifeexp_summary`.  
+
+```{r}
+# Task: summarise data (hint: group_by() + summarise())
+```
+
+## 5. Visualise trends
+
+Summaries are useful, but a plot makes patterns easier to see. We will now compare how life expectancy has changed in different regions.  
+
+**Task:** Produce a line plot of life expectancy over time for **two continents of your choice**. Label the axes and add a title.  
+
+```{r}
+# Task: plot trends (hint: ggplot() + geom_line())
+```
+
+## 6. Reflection
+
+Finally, consider what your analysis shows. Think about whether continents improved at the same pace, and whether any regions lag behind.  
+
+**Task:** Write 3–4 sentences describing the patterns you see across continents in life expectancy trends.  
+
+*Write your reflection here…*
+
+## Appendix
+
+```{r}
+sessionInfo()
+```

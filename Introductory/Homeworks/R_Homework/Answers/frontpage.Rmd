@@ -1,0 +1,34 @@
+---
+title: "R Take-Home Assignments — Answer Key"
+author: "PhD Course — R Programming"
+date: "`r format(Sys.Date())`"
+output:
+  pdf_document:
+    toc: false
+    number_sections: false
+fontsize: 12pt
+geometry: margin=2.5cm
+---
+
+# About these documents
+
+This document contains the **worked-out answers** to all assignments.  
+
+- The text is **identical** to the student version: introductions, task descriptions, and story-like explanations are the same.  
+- The **only difference** is that the code blocks are **filled in with solutions** instead of hints.  
+- Outputs (tables, plots) are also shown so you can check your own results.  
+
+# How to use the answers
+
+We strongly recommend:
+
+1. **First try the assignments yourself.**  
+   Use the hints and explanations in the student versions.  
+
+2. **Only consult these answers afterwards,** to check your solutions, compare approaches, or get unstuck.  
+
+3. Treat this document as a **learning aid, not a shortcut**. The real value comes from struggling with the exercises before reading the solutions.  
+
+# Final remark
+
+Keep both the assignments and the answer key. Together, they provide you with a **mini reference manual** for common R workflows and analyses that you can revisit later during your PhD.

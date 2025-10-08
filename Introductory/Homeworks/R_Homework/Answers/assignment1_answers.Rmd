@@ -1,0 +1,119 @@
+---
+title: "R Take-Home Assignment 1: Gapminder (Wrangling & Visualization)"
+author: "Your Name"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+# Overview
+
+In this assignment you will work with the **Gapminder dataset**, which contains information on life expectancy, population size, and GDP per capita for 142 countries between 1952 and 2007.  
+You will practice importing data, exploring its structure, subsetting, summarising, and producing plots to investigate global health and economic patterns.  
+
+- <https://github.com/resbaz/r-novice-gapminder-files/raw/master/data/gapminder-FiveYearData.csv>  
+- **Skills:** loading CSVs, subsetting, summarising, plotting  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Preparation
+
+You will need the following R packages:  
+
+- `dplyr`  
+- `ggplot2`  
+- `readr`  
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+# 1. Load the data
+
+The starting point of any analysis is importing the dataset. Here, you will use the URL provided above.  
+
+**Task:** Load the Gapminder dataset into R and store it as `gapminder`.  
+
+```{r}
+url <- "https://github.com/resbaz/r-novice-gapminder-files/raw/master/data/gapminder-FiveYearData.csv"
+gapminder <- read_csv(url, show_col_types = FALSE)
+head(gapminder)
+```
+
+# 2. Explore the dataset
+
+Before doing analysis, it is important to understand the dataset’s scope. You should examine how many countries it contains, which years are covered, and what variables are available.  
+
+**Task:** Report the number of countries, the range of years, and the variable names.  
+
+```{r}
+n_distinct(gapminder$country)
+range(gapminder$year)
+names(gapminder)
+```
+
+Write your answers here:  
+```
+Countries: ...
+Years: ...
+Variables: ...
+```
+
+# 3. Subset the data
+
+Analyses are often focused on a specific region. For this step, you will work only with European countries.  
+
+**Task:** Create a subset containing only the rows where `continent` is `"Europe"`. Save this as `europe`.  
+
+```{r}
+europe <- gapminder %>% filter(continent == "Europe")
+head(europe)
+```
+
+# 4. Summarise life expectancy
+
+To see general patterns across the world, it is helpful to calculate average values. By summarising life expectancy by continent and year, you can compare how regions developed over time.  
+
+**Task:** Calculate the mean life expectancy per continent per year. Save the result as `lifeexp_summary`.  
+
+```{r}
+lifeexp_summary <- gapminder %>%
+  group_by(continent, year) %>%
+  summarise(mean_lifeExp = mean(lifeExp), .groups = "drop")
+head(lifeexp_summary)
+```
+
+# 5. Visualise trends
+
+Summaries are useful, but plots reveal patterns more clearly. A line plot of life expectancy over time allows you to compare trajectories between regions.  
+
+**Task:** Produce a line plot of life expectancy over time for **two continents of your choice**. Label the axes and add a title.  
+
+```{r}
+lifeexp_summary %>% filter(continent %in% c("Europe", "Asia")) %>%
+  ggplot(aes(year, mean_lifeExp, color=continent)) +
+  geom_line(linewidth=1) +
+  labs(title="Life expectancy trends", x="Year", y="Mean Life Expectancy") +
+  theme_minimal()
+```
+
+# 6. Reflection
+
+Numbers and plots show differences, but interpretation is just as important. Take a moment to reflect on what you observe.  
+
+**Task:** Write 3–4 sentences describing the patterns you see across continents in life expectancy trends.  
+
+*Write your reflection here…*
+
+# Appendix
+
+```{r}
+sessionInfo()
+```

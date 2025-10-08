@@ -1,0 +1,99 @@
+---
+title: "R Take-Home Assignment 3: OWID COVID-19 (Loops & Conditionals)"
+author: "Your Name"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+## Overview
+
+In this assignment you will work with the **Our World in Data (OWID) COVID-19 dataset**, which tracks the spread and impact of the pandemic globally. We will focus on daily new cases for three countries — the Netherlands, Germany, and Italy — to explore how case numbers change over time.  
+
+Because daily counts can be noisy (for example, due to weekend reporting effects), you will use rolling averages and logical flags to highlight important peaks. This exercise gives practice with **loops and conditionals**, two fundamental programming tools that help automate repetitive tasks and make decisions based on data.  
+
+- **Source:** [OWID compact CSV](https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv)  
+- **Skills:** importing CSVs, subsetting, rolling averages, logical flags, time-series plots  
+- **Deliverable:** knitted **HTML** plus your completed `.Rmd`  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Preparation
+
+You will need: `dplyr`, `ggplot2`, `readr`, `zoo`.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(zoo)
+```
+
+## 1. Load and subset the data
+
+The dataset is large and contains many countries. Since we want to compare trends in only three European countries, we first need to import the full dataset and then narrow it down.  
+
+**Task:** Load the OWID dataset from the provided URL. Subset it to the Netherlands, Germany, and Italy. Convert the `date` column to type `Date`.  
+
+```{r}
+url <- 'https://catalog.ourworldindata.org/garden/covid/latest/compact/compact.csv'
+owid <- read_csv(url, show_col_types = FALSE)
+owid_small <- owid %>% 
+  filter(country %in% c('Netherlands','Germany','Italy')) %>% 
+  mutate(date = as.Date(date))
+head(owid_small)
+```
+
+## 2. Compute a 7-day moving average
+
+Raw daily case counts jump up and down due to reporting schedules. A moving average smooths these fluctuations, making it easier to see real trends.  
+
+**Task:** For each of the three countries, calculate a 7-day rolling average of `new_cases`. Store it in a new column `ma7`.  
+
+```{r}
+owid_small <- owid_small %>% 
+  arrange(country, date) %>% 
+  group_by(country) %>% 
+  mutate(ma7 = rollmean(new_cases, k=7, fill=NA, align='right')) %>% 
+  ungroup()
+head(owid_small)
+```
+
+## 3. Flag large values
+
+Public health authorities often monitor when case numbers cross certain thresholds. Here, we will flag days with especially high case numbers.  
+
+**Task:** Add a logical column `flag_high` that is `TRUE` if `ma7 > 10000` and `FALSE` otherwise.  
+
+```{r}
+owid_small <- owid_small %>% 
+  mutate(flag_high = ma7 > 10000)
+head(owid_small)
+```
+
+## 4. Plot with flagged points
+
+A visualisation makes it easy to compare the three countries. Highlighting the flagged points will help you see when major peaks occurred.  
+
+**Task:** Create a line plot of the 7-day averages (`ma7`) over time for each country. Use different colours for the countries, and mark flagged points with an additional symbol (e.g. points in red).  
+
+```{r}
+ggplot(owid_small, aes(date, ma7, color=country)) + 
+  geom_line() +
+  geom_point(data=subset(owid_small, flag_high), size=1, color='red') +
+  labs(title='COVID-19 7-day avg new cases', x='Date', y='7-day avg') + 
+  theme_minimal()
+```
+
+## 5. Reflection
+
+Finally, think about the patterns. Which country had the highest peaks? Did they occur at the same time? Did the threshold capture the waves you would expect?  
+
+**Task:** Write 3–4 sentences comparing the trends across the three countries and reflecting on how loops and conditionals helped structure the analysis.  
+
+*Write your reflection here…*
