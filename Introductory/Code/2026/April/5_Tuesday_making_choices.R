@@ -120,17 +120,74 @@ length(c(1,3,35,35,3,6,65))
 # the vector
 nchar(c(1,4,5,6,5,6,711))
 nchar(c(315, 11, "hello", "$^@$&#%*"))
-
+nchar(c("gaaeagfa"))
+nchar("agaeA3")
 # Difference in indexing vectors and strings
 test_vector <- c(1,5,6,77,2)
 test_vector[2]
 password[2]
 password[1]
-
+# This takes the string and then the start position of where
+# we want a subset (to index) and third is the end position
+# e.g. taking the second character like this ->
+substr(password, 2,2)
+# If you want to know more about a function then you can use
+# the "?" before the function name and run it (it must be empty)
+?substr()
+password <- "1stronger"
 
 # Making even more complex statements
-if ((nchar(password)==6 && substr(password, 1,1) == 's') || nchar(password) >6 && substr(password, 1,1) == 's'){
+if ((nchar(password)==6 && substr(password, 1,1) == 's') ||
+    nchar(password) >6 && substr(password, 1,1) == 's'){
   print("statement 1")
-} elif (num < 100 && num > 50 || num >15 && num < 89) {
+} else if ((num < 100 && num > 50) || (num >15 && num < 89)) {
   print("statement 2")
 }
+
+# Can you write a "more complex" statement? i.e. using 
+# (X AND Y) OR (A AND B)
+password <- "nederlande"
+if (nchar(password) > 5 && substr(password, 4,4) == "d" || substr(password, 2,2) == "i") {
+  print("password is strong")
+} else {
+  print("print password is weak")
+}
+
+# For this is NOT equal to  we use "!="
+breakfast <- ""
+
+# This checks if breakfast is anything but muesli
+if (breakfast != "muesli") {
+  print("toast again..")
+}
+
+# if I don't have muesli then I eat toast
+
+# How NA works with logic
+a <- NA
+a == 1
+
+# Can we check if there is an NA?
+if (a == NA) {
+  print('no value!')
+}
+
+is.na(a)
+# rewriting the statement above
+if (is.na(a)) {
+  print('no value!')
+}
+
+# NA does not engage with logical checks
+# To get a logical (boolean) return we need to use is.na()
+
+grade <- 7
+if (grade < 9 || grade > 6) {
+  print("good job!")
+}
+# This format does not work
+if (6< grade <9) {
+  print('well done')
+}
+
+
